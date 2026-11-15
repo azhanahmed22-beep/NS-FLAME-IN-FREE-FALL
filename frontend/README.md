@@ -17,7 +17,7 @@ The workspace charts and tables use the locally ingested dataset records. The as
 
 ## Deploy to Vercel
 
-Import the repository, set the project root to `frontend`, build with `npm run build`, and publish `dist`. Set `VITE_API_BASE_URL` to the deployed FastAPI origin (for example, `https://zyntara-api.onrender.com`). The `vercel.json` rewrite supports direct navigation to workspace routes. Add the exact Vercel site origin to the backend's `CORS_ORIGINS` JSON array.
+Import the repository, set the project root to `frontend`, build with `npm run build`, and publish `dist`. Set `VITE_API_BASE_URL` to the frontend's own Vercel origin (for example, `https://zyntara-frontend.vercel.app`). The `vercel.json` rewrites proxy API, OpenAPI, and health requests to the backend and preserve direct navigation to workspace routes. The backend's `CORS_ORIGINS` should still include the exact frontend origin for direct API access.
 
 ## Build
 

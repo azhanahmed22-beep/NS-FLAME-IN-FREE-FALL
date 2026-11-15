@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://zyntara-api.vercel.app/api/$1" },
+    { "source": "/openapi.json", "destination": "https://zyntara-api.vercel.app/openapi.json" },
+    { "source": "/health", "destination": "https://zyntara-api.vercel.app/health" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

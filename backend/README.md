@@ -84,8 +84,8 @@ Vercel can host the frontend and the FastAPI backend as separate projects from t
    - `DATABASE_URL` = `sqlite:////tmp/zyntara.db`
    - `CORS_ORIGINS` = a JSON array containing the exact frontend origin, for example `["https://zyntara-frontend.vercel.app"]`
 3. Deploy the backend. On each serverless instance's first import, it applies migrations and ingests the bundled CSV files into `/tmp/zyntara.db`.
-4. Import the same repository again as a frontend project with **Root Directory** set to `frontend`. Set `VITE_API_BASE_URL` to the backend's `https://<backend-project>.vercel.app` origin, then deploy.
-5. If the Vercel frontend domain differs from the value used in step 2, update `CORS_ORIGINS` and redeploy the backend.
+4. Import the same repository again as a frontend project with **Root Directory** set to `frontend`. Set `VITE_API_BASE_URL` to the frontend's own `https://<frontend-project>.vercel.app` origin, then deploy. Its Vercel rewrites proxy API requests to the backend, keeping browser requests same-origin.
+5. If the frontend domain differs from the value used in step 2, update `CORS_ORIGINS` and redeploy the backend.
 
 This SQLite setup is a read-only demo: Vercel's `/tmp` storage is ephemeral and isolated per serverless instance, so user-created changes are not durable and the bundled datasets are reseeded after a cold start. Use hosted PostgreSQL for durable shared state. `GEMINI_API_KEY` is optional and should be entered only in the backend project's environment settings.
 
