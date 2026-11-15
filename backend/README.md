@@ -74,6 +74,21 @@ The API allows the local Vite frontend origins by default. Set `CORS_ORIGINS` in
 
 ## Cloud deployment
 
+### Vercel (no-card demo)
+
+Vercel can host the frontend and the FastAPI backend as separate projects from this repository:
+
+1. Import the repository for the backend and set **Root Directory** to `backend`. The Python Runtime detects `main.py` as the FastAPI entrypoint.
+2. Set these backend environment variables for Production and Preview:
+   - `ENVIRONMENT` = `vercel`
+   - `DATABASE_URL` = `sqlite:////tmp/zyntara.db`
+   - `CORS_ORIGINS` = a JSON array containing the exact frontend origin, for example `["https://zyntara-frontend.vercel.app"]`
+3. Deploy the backend. On each serverless instance's first import, it applies migrations and ingests the bundled CSV files into `/tmp/zyntara.db`.
+4. Import the same repository again as a frontend project with **Root Directory** set to `frontend`. Set `VITE_API_BASE_URL` to the backend's `https://<backend-project>.vercel.app` origin, then deploy.
+5. If the Vercel frontend domain differs from the value used in step 2, update `CORS_ORIGINS` and redeploy the backend.
+
+This SQLite setup is a read-only demo: Vercel's `/tmp` storage is ephemeral and isolated per serverless instance, so user-created changes are not durable and the bundled datasets are reseeded after a cold start. Use hosted PostgreSQL for durable shared state. `GEMINI_API_KEY` is optional and should be entered only in the backend project's environment settings.
+
 The repository's `render.yaml` defines a free Render Docker web service. For a demo, it seeds a SQLite database at `/tmp/zyntara.db` from the bundled CSV files on each startup; the current API routes do not persist user-generated records.
 
 After deploying the frontend, set `CORS_ORIGINS` in the Render dashboard to a JSON array containing its exact origin, for example `["https://your-site.vercel.app"]`. Optionally set `GEMINI_API_KEY` there to enable Gemini; never commit or paste it into frontend settings.
