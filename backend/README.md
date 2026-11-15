@@ -74,12 +74,10 @@ The API allows the local Vite frontend origins by default. Set `CORS_ORIGINS` in
 
 ## Cloud deployment
 
-The repository's `render.yaml` defines a free Render Docker web service. At deploy time, set:
+The repository's `render.yaml` defines a free Render Docker web service. For a demo, it seeds a SQLite database at `/tmp/zyntara.db` from the bundled CSV files on each startup; the current API routes do not persist user-generated records.
 
-* `DATABASE_URL` to a hosted PostgreSQL connection string (Neon Free is suitable for a small demo). Standard `postgresql://` and `postgres://` URLs are adapted to the installed `psycopg` driver.
-* `CORS_ORIGINS` to a JSON array containing the deployed frontend origin, for example `["https://your-site.vercel.app"]`.
-* Optionally, `GEMINI_API_KEY` in the Render dashboard to enable Gemini; never commit or paste it into frontend settings.
+After deploying the frontend, set `CORS_ORIGINS` in the Render dashboard to a JSON array containing its exact origin, for example `["https://your-site.vercel.app"]`. Optionally set `GEMINI_API_KEY` there to enable Gemini; never commit or paste it into frontend settings.
 
-The container applies Alembic migrations and idempotently ingests the bundled CSV datasets before starting the API. Do not use the Render service's local SQLite file for deployed data: the free service filesystem is ephemeral. The free web service can also sleep when idle, so the first request may be delayed.
+The container applies Alembic migrations and idempotently ingests the bundled CSV datasets before starting the API. Render Free has an ephemeral filesystem and sleeps when idle, so this configuration is for a read-only demo: the database is rebuilt after restarts, the first request may be delayed, and user-created changes would not persist. For durable writes, use hosted PostgreSQL (Neon is an option); standard `postgresql://` and `postgres://` URLs are adapted to the installed `psycopg` driver.
 
 Add a new dataset: write a parser in `app/services/ingestion/parsers/`, register it in `registry.py`, add it to `data/manifest.json`.
