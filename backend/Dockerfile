@@ -7,4 +7,4 @@ COPY . .
 RUN useradd --create-home zyntara && chown -R zyntara /app
 USER zyntara
 EXPOSE 8000
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && python -m scripts.ingest && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

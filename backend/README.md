@@ -21,8 +21,7 @@ Research backend for microgravity combustion data.
 The material comparison reports only observed derived smoke evidence; it is not an ML score or a spacecraft safety rating.
 Gemini-generated answers are optional and require `GEMINI_API_KEY`; without it, the assistant returns a local evidence summary.
 Only the five owner-supplied CSVs listed below are available; the original NASA raw files were not downloaded.
-JWT auth, upload validation, rate limiting, caching, and PostgreSQL have not been implemented or verified.
-Docker files are present but have not been tested.
+JWT auth, upload validation, rate limiting, and caching have not been implemented. PostgreSQL/Docker deployment has not yet been verified against a hosted database.
 
 `GET /api/v1/datasets` lists ingested dataset versions with source hashes, parser/row counts, investigation identity, and issue counts. It supports `status`, `psi_id`, `limit`, and `offset` query parameters; server filesystem paths are not returned.
 
@@ -72,5 +71,15 @@ python -m pytest
 `python -m scripts.ingest` is idempotent and loads the files in `data/manifest.json`.
 
 The API allows the local Vite frontend origins by default. Set `CORS_ORIGINS` in `.env` to a JSON array of trusted origins when deploying the frontend elsewhere; avoid wildcard origins when credentials are enabled. To enable Gemini, set `GEMINI_API_KEY` in `backend/.env`; never put the key in frontend code or commit it.
+
+## Cloud deployment
+
+The repository's `render.yaml` defines a free Render Docker web service. At deploy time, set:
+
+* `DATABASE_URL` to a hosted PostgreSQL connection string (Neon Free is suitable for a small demo). Standard `postgresql://` and `postgres://` URLs are adapted to the installed `psycopg` driver.
+* `CORS_ORIGINS` to a JSON array containing the deployed frontend origin, for example `["https://your-site.vercel.app"]`.
+* Optionally, `GEMINI_API_KEY` in the Render dashboard to enable Gemini; never commit or paste it into frontend settings.
+
+The container applies Alembic migrations and idempotently ingests the bundled CSV datasets before starting the API. Do not use the Render service's local SQLite file for deployed data: the free service filesystem is ephemeral. The free web service can also sleep when idle, so the first request may be delayed.
 
 Add a new dataset: write a parser in `app/services/ingestion/parsers/`, register it in `registry.py`, add it to `data/manifest.json`.

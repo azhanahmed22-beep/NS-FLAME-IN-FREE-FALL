@@ -14,7 +14,7 @@ def create_db_engine(url: str) -> Engine:
 
 @lru_cache
 def get_engine() -> Engine:
-    return create_db_engine(get_settings().database_url)
+    return create_db_engine(get_settings().sqlalchemy_database_url)
 
 
 def get_session_factory(engine: Engine | None = None) -> sessionmaker[Session]:

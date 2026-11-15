@@ -15,6 +15,10 @@ Set `VITE_API_BASE_URL` to the FastAPI server origin (for example `http://127.0.
 
 The workspace charts and tables use the locally ingested dataset records. The assistant returns local evidence availability without a Gemini key; Gemini-generated answers are enabled by setting `GEMINI_API_KEY` in the backend `.env`. The flame view is a labeled, illustrative visualization—not NASA footage or a validated combustion simulation.
 
+## Deploy to Vercel
+
+Import the repository, set the project root to `frontend`, build with `npm run build`, and publish `dist`. Set `VITE_API_BASE_URL` to the deployed FastAPI origin (for example, `https://zyntara-api.onrender.com`). The `vercel.json` rewrite supports direct navigation to workspace routes. Add the exact Vercel site origin to the backend's `CORS_ORIGINS` JSON array.
+
 ## Build
 
 ```powershell

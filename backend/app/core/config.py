@@ -22,6 +22,13 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.5-flash"
 
     @property
+    def sqlalchemy_database_url(self) -> str:
+        for prefix in ("postgres://", "postgresql://"):
+            if self.database_url.startswith(prefix):
+                return "postgresql+psycopg://" + self.database_url[len(prefix):]
+        return self.database_url
+
+    @property
     def raw_dir(self) -> Path:
         return self.data_dir / "raw"
 
