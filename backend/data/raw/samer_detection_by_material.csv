@@ -1,0 +1,6 @@
+material,tests,obsc_drop_med_V,obsc_drop_min_V,obsc_drop_max_V,pct_below_3p30_med,ionA_med_V
+Silicone,9,0.2997,0.005,0.9151,81.1,0.5881
+Pyrell,8,0.06895,0.0011,0.2597,9.65,0.2087
+Lampwick,7,0.0202,0.0012,0.0784,0.7,0.0925
+Kapton,14,0.00075,0.0,0.0314,0.0,0.02945
+Teflon,7,0.0006,0.0,0.0037,0.0,0.029
